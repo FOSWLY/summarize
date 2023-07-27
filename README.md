@@ -1,24 +1,30 @@
-# summarize-articles
+## [FOSWLY] Summarize Articles Extension
 
-## Project setup
-```
-npm install
-```
+Небольшое расширение, позволяющее быстро пересказывать статьи.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Установка расширения (временно не доступно):
+- Firefox (версия 109+): [Link](...)
+- Chrome: [Link](...)
 
-### Compiles and minifies for production
+## Как собрать расширение?
+1. Установите NodeJS 18+
+2. Установите зависимости:
+```bash
+npm i
+```
+3. Сборка расширения:
 ```
 npm run build
 ```
 
-### Lints and fixes files
+3.1. Сборка для Разработки (релоад при изменениях в коде):
+```
+npm run build-watch
+```
+
+3.2. Запуск линтера:
 ```
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![example btn](https://github.com/FOSWLY/summarize-articles/blob/master/gh/screenshot.png "example image")
