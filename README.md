@@ -32,4 +32,4 @@ npm run lint
 2. Зайдите в `src/api/yandexRequests.js` и замените API_DOMAIN на свой домен, если ваш сервер не поддерживает https, то, так же, нужно будет в yandexRequests.universalFetch поменять "https" на "http"
 3. Соберите расширение
 
-![example btn](https://github.com/FOSWLY/summarize-articles/blob/master/gh/screenshot.png "example image")
+![example btn](https://github.com/FOSWLY/summarize-articles/blob/main/gh/screenshot.png "example")
