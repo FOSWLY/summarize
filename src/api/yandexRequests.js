@@ -1,4 +1,4 @@
-const API_DOMAIN = 'foswly-sa.toiloff.ru';
+const API_DOMAIN = 'foswly-sa.toil.cc';
 
 const options = {
   method: "POST",
@@ -10,6 +10,7 @@ const options = {
 };
 
 export const yandexStatus = {
+  'StatusSuccessVideo': 0,
   'StatusInProgress': 1,
   'StatusSuccess': 2,
   'StatusError': 3,
@@ -27,11 +28,12 @@ export const yandexErrorCode = {
   [5]: "Что-то пошло не так. Попробуйте вернуться позже или выберите другую статью",
   [6]: "Нейросети пока не умеют пересказывать такие статьи. Попробуйте другую.",
   [7]: "Что-то пошло не так. Попробуйте вернуться позже или выберите другую статью",
-  [8]: "Нейросети пока не умеют пересказывать такие статьи. Попробуйте другую.",
+  [8]: "Нейросети пока не умеют пересказывать такие видео. Попробуйте другую.", // not the real error text
   [9]: "Что-то пошло не так. Попробуйте вернуться позже или выберите другую статью",
   [10]: "Версия браузера устарела. Клиент должен показать сообщение с предложением обновить браузер.",
   [11]: "Нейросети пока не умеют пересказывать такие статьи. Попробуйте другую.",
-  [12]: "Нейросети пока не умеют пересказывать такие статьи. Попробуйте другую."
+  [12]: "Нейросети пока не умеют пересказывать такие статьи. Попробуйте другую.",
+  [21]: "Нейросети пока не умеют пересказывать такие длинные видео. Попробуйте другое.", // not the real error text
 }
 
 export const yandexRequests = {
@@ -81,7 +83,7 @@ export const yandexRequests = {
   },
 
   async generation(body) {
-    // read documentation: https://foswly-sa.toiloff.ru/docs
+    // read documentation: https://foswly-sa.toil.cc/docs
     let fetchOptions = {...options};
     fetchOptions.body = JSON.stringify(body);
     return await yandexRequests.universalFetch('generation', fetchOptions)
