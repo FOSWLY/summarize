@@ -3,7 +3,7 @@ import { sleep } from "@/utils/utils.js"
 
 
 export const apiWrapper = {
-  checkStatusCode(res, endpoint = '...') {
+  checkStatusCode(res, urlType, endpoint = '...') {
     switch (res.status_code) {
       case yandexStatus.StatusFetchError:
         return {
@@ -28,17 +28,47 @@ export const apiWrapper = {
           ]
         }
       case yandexStatus.StatusSuccess:
-        return {
+        return urlType === 'article' ? {
           status: "success",
           title: res.title,
           desc: res.thesis,
           sharingUrl: res.sharing_url
+        } : {
+          status: "error",
+          title: "Ошибка YandexGPT",
+          desc: [
+            {
+              id: 0,
+              content: yandexErrorCode[res.error_code]
+            }
+          ]
+        }
+      case yandexStatus.StatusSuccessVideo:
+        return urlType === 'video' ? {
+          status: "success",
+          title: res.title,
+          desc: res.keypoints,
+          sharingUrl: res.sharing_url
+        } : {
+          status: "error",
+          title: "Ошибка YandexGPT",
+          desc: [
+            {
+              id: 0,
+              content: yandexErrorCode[res.error_code]
+            }
+          ]
         }
     }
     return true;
   },
 
-  async getSharingUrl(url) {
+  async getSharingUrl(url, urlType) {
+    if (urlType === 'video') {
+      // skip sharing url because isn't working with video
+      return await apiWrapper.generateSiteData(url, urlType);
+    }
+
     const res = await yandexRequests.getSharingUrl(url);
     console.log("sharing-url", res);
 
@@ -48,28 +78,32 @@ export const apiWrapper = {
       if (sharingToken !== undefined) {
         const resSharingData = await yandexRequests.getSharingData(sharingToken);
         console.log("response /sharing", resSharingData)
-        if (resSharingData.status_code === yandexStatus.StatusSuccess) {
+        if (resSharingData.status_code === yandexStatus.StatusSuccess || resSharingData.status_code === yandexStatus.StatusSuccessVideo) {
           return {
             status: "success",
             title: resSharingData.title,
-            desc: resSharingData.thesis,
+            desc: resSharingData.type === 'article' ? resSharingData.thesis : resSharingData.keypoints,
             sharingUrl: sharingUrl
           }
         }
       }
     }
 
-    return await apiWrapper.generateSiteData(url);
+    return await apiWrapper.generateSiteData(url, urlType);
   },
 
-  async generateSiteData(url) {
-    let res = await yandexRequests.generation({
-      "article_url": url
-    });
+  async generateSiteData(url, urlType = 'article') {
+    const genData = urlType === 'article' ? {
+      'article_url': url
+    } : {
+      'video_url': url
+    }
+
+    let res = await yandexRequests.generation(genData);
 
     console.log(res);
 
-    const status = apiWrapper.checkStatusCode(res);
+    const status = apiWrapper.checkStatusCode(res, urlType);
     console.log(status)
     if (Object.keys(status).length) {
       return status;
@@ -83,10 +117,11 @@ export const apiWrapper = {
       console.log('requesting session', session_id)
 
       res = await yandexRequests.generation({
-        "session_id": session_id
+        "session_id": session_id,
+        ...genData
       });
 
-      const status = apiWrapper.checkStatusCode(res);
+      const status = apiWrapper.checkStatusCode(res, urlType);
       console.log(status)
       if (Object.keys(status).length) {
         return status;
