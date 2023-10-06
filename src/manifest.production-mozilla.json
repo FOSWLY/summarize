@@ -1,10 +1,10 @@
 {
     "manifest_version": 3,
-    "name": "[FOSWLY] - Summarize articles",
-    "description": "A small extension that allows you to quickly retell articles",
+    "name": "[FOSWLY] - Summarize",
+    "description": "A small extension that allows you to quickly retell articles or video",
     "author": "Toil",
-    "homepage_url": "https://github.com/FOSWLY/summarize-articles",
-    "version": "1.0.0",
+    "homepage_url": "https://github.com/FOSWLY/summarize",
+    "version": "1.1.0",
     "icons": {
         "16": "/logo16.png",
         "32": "/logo32.png",
