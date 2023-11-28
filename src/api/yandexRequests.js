@@ -1,4 +1,4 @@
-const API_DOMAIN = 'foswly-sa.toil.cc';
+const API_DOMAIN = 'summarize.toil.cc';
 
 const options = {
   method: "POST",
