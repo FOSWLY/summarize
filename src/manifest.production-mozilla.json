@@ -4,7 +4,7 @@
     "description": "A small extension that allows you to quickly retell articles or video",
     "author": "Toil",
     "homepage_url": "https://github.com/FOSWLY/summarize",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "icons": {
         "16": "/logo16.png",
         "32": "/logo32.png",
@@ -20,7 +20,7 @@
         "tabs",
         "webRequest"
     ],
-    "host_permissions": ["*://foswly-sa.toil.cc/*"],
+    "host_permissions": ["*://summarize.toil.cc/*"],
     "browser_specific_settings": {
         "gecko": {
             "id": "toil.contact@yandex.com",
