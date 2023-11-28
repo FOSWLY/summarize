@@ -1,5 +1,6 @@
 import { yandexRequests, yandexStatus, yandexErrorCode } from '@/api/yandexRequests.js'
 import { sleep } from "@/utils/utils.js"
+import emitter from "tiny-emitter/instance";
 
 
 export const apiWrapper = {
@@ -59,6 +60,14 @@ export const apiWrapper = {
             }
           ]
         }
+      case yandexStatus.StatusInProgress:
+        if (res.keypoints || res.thesis) {
+          return {
+            status: "generation",
+            title: res.video_title ?? res.title,
+            desc: res.type === 'article' ? res.thesis : res.keypoints,
+          }
+        }
     }
     return true;
   },
@@ -79,12 +88,14 @@ export const apiWrapper = {
         const resSharingData = await yandexRequests.getSharingData(sharingToken);
         console.log("response /sharing", resSharingData)
         if (resSharingData.status_code === yandexStatus.StatusSuccess || resSharingData.status_code === yandexStatus.StatusSuccessVideo) {
-          return {
+          const data = {
             status: "success",
             title: resSharingData.title,
             desc: resSharingData.type === 'article' ? resSharingData.thesis : resSharingData.keypoints,
             sharingUrl: sharingUrl
           }
+          emitter.emit("update-summarize", data);
+          return data;
         }
       }
     }
@@ -104,8 +115,9 @@ export const apiWrapper = {
     console.log(res);
 
     const status = apiWrapper.checkStatusCode(res, urlType);
-    console.log(status)
-    if (Object.keys(status).length) {
+    emitter.emit("update-summarize", status);
+
+    if (typeof status === "object" && status.status !== "generation") {
       return status;
     }
 
@@ -121,9 +133,10 @@ export const apiWrapper = {
         ...genData
       });
 
+      console.log(res);
       const status = apiWrapper.checkStatusCode(res, urlType);
-      console.log(status)
-      if (Object.keys(status).length) {
+      emitter.emit("update-summarize", status);
+      if (typeof status === "object" && status.status !== "generation") {
         return status;
       }
     }
