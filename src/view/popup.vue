@@ -15,7 +15,7 @@
         <ul class="content-list" v-for="partData of sharingData.desc" :key="partData.id">
           <template v-if="partData.theses">
             <li>
-              <h3 @click="moveToTime(partData.start_time)">
+              <h3>
                 <span class="content-time"> {{ formatSecs(partData.start_time) }} </span>
                 {{ partData.content }}
               </h3>
@@ -54,6 +54,8 @@
 
 <script>
 import { apiWrapper } from '@/api/apiWrapper.js'
+import emitter from "tiny-emitter/instance";
+
 
 export default {
   name: 'popupView',
@@ -63,27 +65,36 @@ export default {
       sharingData: {},
     }
   },
+  mounted() {
+    emitter.on("update-summarize", (data) => {
+      if (data === true) {
+        return;
+      }
+
+      if (!(data !== undefined && Object.keys(data).length)) {
+        console.log("not valid", data)
+        this.sharingData = {
+          status: "error",
+          title: "Ошибка выполнения",
+          desc: [
+            {
+              id: 0,
+              content: "Произошла ошибка при выполнение одного из запросов. Оставьте обратную связь об этой ошибке, и мы попытаемся ее решить."
+            }
+          ]
+        }
+      } else {
+        console.log("valid", data)
+        this.sharingData = data;
+      }
+    });
+  },
   created: async function () {
     const currentURL = await this.getTab();
     const urlType = this.getURLType(currentURL);
     console.log(currentURL)
 
-    let data = await apiWrapper.getSharingUrl(currentURL, urlType);
-    console.log(data)
-    if (!(data !== undefined && Object.keys(data).length)) {
-      data = {
-        status: "error",
-        title: "Ошибка выполнения",
-        desc: [
-          {
-            id: 0,
-            content: "Произошла ошибка при выполнение одного из запросов. Оставьте обратную связь об этой ошибке, и мы попытаемся ее решить."
-          }
-        ]
-      }
-    }
-
-    this.sharingData = data;
+    await apiWrapper.getSharingUrl(currentURL, urlType);
   },
   methods: {
     async copyToClipboard(text) {
