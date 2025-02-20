@@ -1,47 +1,41 @@
 {
-  "name": "summarize-articles",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "build-watch": "vue-cli-service  --env.NODE_ENV=development build-watch --mode development"
-  },
-  "dependencies": {
-    "core-js": "^3.33.0",
-    "tiny-emitter": "^2.1.0",
-    "vue": "^3.3.4"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/eslint-parser": "^7.22.15",
-    "@vue/cli-plugin-babel": "~5.0.8",
-    "@vue/cli-plugin-eslint": "~5.0.8",
-    "@vue/cli-service": "~5.0.8",
-    "eslint": "^8.51.0",
-    "eslint-plugin-vue": "^9.17.0",
-    "vue-cli-plugin-chrome-extension-cli": "~1.1.4"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true,
-      "webextensions": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "@babel/eslint-parser"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead",
-    "not ie 11"
-  ]
+	"name": "summarize-articles",
+	"private": true,
+	"version": "2.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "DEV_WATCH=true vite build --watch",
+		"build": "vite build && bun build --minify ./src/scripts/content.ts --outdir ./dist/js",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"format": "prettier --write .",
+		"lint": "prettier --check . && eslint ."
+	},
+	"devDependencies": {
+		"@eslint/compat": "^1.2.5",
+		"@eslint/js": "^9.18.0",
+		"@sveltejs/adapter-auto": "^4.0.0",
+		"@sveltejs/adapter-static": "^3.0.8",
+		"@sveltejs/kit": "^2.16.0",
+		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+		"@types/chrome": "^0.0.304",
+		"eslint": "^9.18.0",
+		"eslint-config-prettier": "^10.0.1",
+		"eslint-plugin-svelte": "^2.46.1",
+		"globals": "^15.14.0",
+		"npm-run-all2": "^7.0.2",
+		"prettier": "^3.4.2",
+		"prettier-plugin-svelte": "^3.3.3",
+		"svelte": "^5.0.0",
+		"svelte-check": "^4.0.0",
+		"sveltekit-adapter-chrome-extension": "^2.0.1",
+		"typescript": "^5.0.0",
+		"typescript-eslint": "^8.20.0",
+		"vite": "^6.0.0"
+	},
+	"dependencies": {
+		"@toil/neurojs": "^1.1.2"
+	}
 }
