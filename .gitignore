@@ -4,7 +4,8 @@ src/manifest.production-backup.json
 .DS_Store
 node_modules
 /dist
-
+/.svelte-kit
+/build
 
 # local env files
 .env.local
@@ -16,11 +17,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Editor directories and files
-.idea
+# Editors
 .vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
