@@ -32,4 +32,4 @@ bun run build
 bun run dev
 ```
 
-![example btn](https://github.com/FOSWLY/summarize/blob/main/gh/screenshot.png 'example')
+![example btn](https://github.com/FOSWLY/summarize/blob/main/repo/screenshot.png 'example')
